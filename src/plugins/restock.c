@@ -225,25 +225,25 @@ bool restock(struct map_session_data *sd, int item_id, int quantity, int rs_from
 			if (gstorage == NULL) {// Doesn't have opened @gstorage yet, so we skip the deletion since *shouldn't* have any item there.
 				return false;
 			}
-			j = gstorage2->storage_amount;
-			gstorage2->lock = 1; 
+			j = gstorage2->items.amount;
+			gstorage2->locked = 1; 
 			for (i = 0; i < j; ++i) {
-				if (gstorage2->items[i].nameid == item_id && gstorage2->items[i].amount >= quantity) {
+				if (gstorage2->items.data[i].nameid == item_id && gstorage2->items.data[i].amount >= quantity) {
 					memset(&item_tmp, 0, sizeof(item_tmp));
-					item_tmp.nameid = gstorage2->items[i].nameid;
+					item_tmp.nameid = gstorage2->items.data[i].nameid;
 					item_tmp.identify = 1;
 					gstorage->delitem(sd, gstorage2, i, quantity);
 					if ((flag = pc->additem(sd,&item_tmp,quantity,LOG_TYPE_STORAGE))) {
 						clif->additem(sd, 0, 0, flag);
 						gstorage->close(sd);
-						gstorage2->lock = 0;
+						gstorage2->locked = 0;
 						pushed_one = true;
 						break;
 					}
 				}
 			}
 			gstorage->close(sd);
-			gstorage2->lock = 0;
+			gstorage2->locked = 0;
 			break;
 		}
 

@@ -312,10 +312,11 @@ void clif_refresh_post(struct map_session_data *sd)
 
 HPExport void plugin_init(void)
 {
-	char output[MAX_AURA+1] = "i";
+	char buf[MAX_AURA+1] = "i";
+	char output[MAX_AURA+1];
 	int i;
 	for (i = 1; i < MAX_AURA; ++i)
-		sprintf(output, "%s?", output);
+		sprintf(output, "%s?", buf);
 
 	addAtcommand("aura", aura);
 	addScriptCommand("aura", output, aura);
